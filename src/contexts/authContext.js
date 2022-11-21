@@ -42,6 +42,43 @@ const AuthContextProvider = ({ children }) => {
         };
     };
 
+    async function checkAuth() {
+        console.log('Check Auth Worked!');
+        setLoading(true);
+        try {
+            const tokens = JSON.parse(localStorage.getItem('tokens'));
+            const Authorization = `Bearer ${tokens.access}`;
+            const config = {
+                headers: {
+                    Authorization
+                }
+            };
+            const res = await axios.post(
+                `${API}/account/token/refresh/`,
+                { refresh: tokens.refresh },
+                config
+            );
+            localStorage.setItem('tokens', JSON.stringify({
+                access: res.data.access,
+                refresh: tokens.refresh
+            }));
+            const email = localStorage.getItem('email');
+            setCurrentUser(email);
+            console.log(res);
+        } catch(err) {
+            console.log(err);
+            handleLogout();
+        } finally {
+            setLoading(false);
+        };
+    };
+
+    function handleLogout() {
+        localStorage.removeItem('tokens');
+        localStorage.removeItem('email');
+        setCurrentUser(false);
+    };
+
     return (
         <authContext.Provider value={{
             currentUser,
@@ -49,7 +86,9 @@ const AuthContextProvider = ({ children }) => {
             loading,
             handleRegister,
             setError,
-            handleLogin
+            handleLogin,
+            checkAuth,
+            handleLogout
         }}>
             { children }
         </authContext.Provider>
