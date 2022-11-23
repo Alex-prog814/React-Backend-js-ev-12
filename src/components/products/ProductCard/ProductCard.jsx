@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 const ProductCard = ({ item }) => {
   const navigate = useNavigate();
 
+  const { deleteProduct, toggleLike } = useContext(productsContext);
+
   return (
     <div>
       Title: {item.title}
@@ -13,11 +15,11 @@ const ProductCard = ({ item }) => {
       Reviews: {item.reviews.length}
       Likes: {item.likes}
       <button onClick={() => navigate(`/products/${item.id}`)}>Details</button>
-      <button>Like</button>
+      <button onClick={() => toggleLike(item.id)}>Like</button>
       {item.is_author ? (
         <>
           <button onClick={() => navigate(`/edit/${item.id}`)}>Edit</button>
-          <button>Delete</button>
+          <button onClick={() => deleteProduct(item.id)}>Delete</button>
         </>
       ) : (
         null

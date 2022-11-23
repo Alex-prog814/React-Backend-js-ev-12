@@ -130,6 +130,87 @@ const ProductsContextProvider = ({ children }) => {
         };
     };
 
+    async function deleteProduct(id){
+        try {
+            const tokens = JSON.parse(localStorage.getItem('tokens'));
+            const Authorization = `Bearer ${tokens.access}`;
+            const config = {
+                headers: {
+                    Authorization
+                }
+            };
+            await axios.delete(`${API}/products/${id}/`, config);
+            getProducts();
+        } catch(err) {
+            console.log(err);
+        };
+    };
+
+    async function toggleLike(id){
+        try {
+            const tokens = JSON.parse(localStorage.getItem('tokens'));
+            const Authorization = `Bearer ${tokens.access}`;
+            const config = {
+                headers: {
+                    Authorization
+                }
+            };
+            const res = await axios(`${API}/products/${id}/toggle_like/`, config);
+            getProducts();
+        } catch(err) {
+            console.log(err);
+        };
+    };
+
+    async function createComment(id, content){
+        try {
+            const tokens = JSON.parse(localStorage.getItem('tokens'));
+            const Authorization = `Bearer ${tokens.access}`;
+            const config = {
+                headers: {
+                    Authorization
+                }
+            };
+            const res = await axios.post(`${API}/reviews/`, content, config);
+            console.log(res);
+            getOneProduct(id);
+        } catch(err) {
+            console.log(err);
+        };
+    };
+
+    async function deleteComment(productId, commentId){
+        try {
+            const tokens = JSON.parse(localStorage.getItem('tokens'));
+            const Authorization = `Bearer ${tokens.access}`;
+            const config = {
+                headers: {
+                    Authorization
+                }
+            };
+            const res = await axios.delete(`${API}/reviews/${commentId}/`, config);
+            getOneProduct(productId);
+        } catch(err) {
+            console.log(err);
+        };
+    };
+
+    async function createCategory(category){
+        try {
+            const tokens = JSON.parse(localStorage.getItem('tokens'));
+            const Authorization = `Bearer ${tokens.access}`;
+            const config = {
+                headers: {
+                    Authorization
+                }
+            };
+            const res = await axios.post(`${API}/category/`, category, config);
+            getCategories();
+        } catch(err) {
+            console.log(err);
+        };
+    };
+
     return (
         <productsContext.Provider value={{
             products: state.products,
@@ -141,7 +222,12 @@ const ProductsContextProvider = ({ children }) => {
             createProduct,
             getProducts,
             getOneProduct,
-            updateProduct
+            updateProduct,
+            deleteProduct,
+            toggleLike,
+            createComment,
+            deleteComment,
+            createCategory
         }}>
             { children }
         </productsContext.Provider>

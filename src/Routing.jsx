@@ -10,6 +10,7 @@ import AddProduct from './components/products/AddProduct/AddProduct';
 import Details from './components/products/Details/Details';
 import ProductList from './components/products/ProductList/ProductList';
 import UpdateProduct from './components/products/UpdateProduct/UpdateProduct';
+import AddCategory from './components/products/AddCategory/AddCategory';
 
 const Routing = () => {
   return (
@@ -20,6 +21,7 @@ const Routing = () => {
         <Route path="/register-success" element={<RegisterSuccess />} />
         <Route path="/login" element={<Login />} />
         {/* products routes */}
+        <Route path="/add-category" element={<AddCategory />} />
         <Route path="/add" element={<AddProduct />} />
         <Route path="/products" element={<ProductList />} />
         <Route path="/products/:id" element={<Details />} />
